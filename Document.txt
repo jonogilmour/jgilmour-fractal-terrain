@@ -1,0 +1,40 @@
+Graphics and Interaction
+Project 1 Implementation Details
+Jonathan Gilmour
+540451
+-----------------------------------------------
+
+Drawing the Landscape
+
+- Note the "up" direction is the Y axis.
+- The diamond square algorithm is used to generate a heightmap. This heightmap generates values for each point, with a random addition/subtraction in height between the provided "randomRange" value.
+- The vertex array is filled using a single vector for each point. And index array is also generated and this is used to draw the landscape. 
+- Normals are also calculated to give accurate light reflection.
+- The terrain is coloured according to height, going in ascending order: Brown (underwater), green, dark green, grey, light grey/white.
+- Simply set "var magnitude" in the Project1Game.LoadContent method to change the size of the landscape (6 gives a 65x65 landscape, 7 gives 129x129) it is recommended to keep this value below 8 to keep the framerate above 30FPS.
+
+
+Water
+
+- The water is simply a flat, semi-opaque plane that lies just below the zero Y position of the landscape.  
+- The water is lit concurrently with the landscape and at the same angle and progression.
+
+
+Light
+
+- The "sunlight" is done unconventially. As a basiceffect's directional lights are positioned at the origin (the middle of the landscape in this case), simply changing the direction of the light does not produce realistic results.
+- Instead, the world is progressively moved around the origin point in a circle such that half the time is spent in darkness and half in light. This emulates the way the Earth travels around the sun. Thus, this accurately simulates a day/night cycle with a proper sunrise and sunset.
+- Additionally, the sunlight is angled to also point towards the centre of the landscape, giving an accurate sunset/rise effect.
+- This results in a framerate drop as the entire landscape must be moved and re-rendered with each frame, however the benefit is a significantly more realistic lighting effect.
+- The light colour is yellow-white, with specular light being slightly yellow as well to simulate sunlight. Ambient light is also added in a small amount to still give detail during "night"
+- An ideal situation would be to create a light separately and move the light around the landscape instead of the other way around, but this was out of the scope of this project (and not possible using basiceffect).
+- On my system, a 129x129 vertex landscape ran at 60FPS constantly.
+- If you would like to see this movement through the camera, comment the line "cameraPosition += translation;" in the camera class Update() method and the camera will be "unhooked" from this movement.
+
+
+Camera
+
+- The camera is moved using WASD keys, with Space moving up, and Ctrl moving down.
+- Pressing X will activate "debug mode" which turns off culling and turns on wireframes
+- Mouse movement and move speed are adjusted in the camera class constructor.
+- The camera mouse-look moves as expected
